@@ -327,7 +327,11 @@
 
 - (IBAction)changeSliderCircleImage:(UIButton *)sender{
     sender.selected = !sender.selected;
-    self.sliderView.sliderCircleImage = sender.selected ? [UIImage imageNamed:@"thumb"] : nil;
+    
+//    UIImage *image = [UIImage imageNamed:@"thumb"];
+    UIImage *image = [UIImage animatedImageWithImages:@[[UIImage imageNamed:@"knob_radial"], [UIImage imageNamed:@"knob_romb"]] duration:1.0];
+    
+    self.sliderView.sliderCircleImage = sender.selected ? image : nil;
 }
 
 @end

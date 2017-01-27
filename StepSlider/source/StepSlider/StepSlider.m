@@ -183,7 +183,19 @@ void withoutCAAnimation(withoutAnimationBlock code)
 
     if (self.sliderCircleImage) {
         _sliderCircleLayer.frame    = CGRectMake(0.f, 0.f, fmaxf(self.sliderCircleImage.size.width, 44.f), fmaxf(self.sliderCircleImage.size.height, 44.f));
-        _sliderCircleLayer.contents = (__bridge id)self.sliderCircleImage.CGImage;
+        
+        if ([self.sliderCircleImage.images count] > 1) {
+            CAKeyframeAnimation *animation = [CAKeyframeAnimation animation];
+            animation.calculationMode = kCAAnimationDiscrete;       // Use linear for smooth transition
+            animation.values = @[(__bridge id)self.sliderCircleImage.images.firstObject.CGImage, (__bridge id)self.sliderCircleImage.images.lastObject.CGImage];
+            animation.duration = 1.0f;
+            animation.repeatCount = HUGE_VAL;
+            animation.autoreverses = YES;
+            [_sliderCircleLayer addAnimation:animation forKey:@"contents"];
+        }
+        else
+            _sliderCircleLayer.contents = (__bridge id)self.sliderCircleImage.CGImage;
+        
         _sliderCircleLayer.contentsGravity = kCAGravityCenter;
     } else {
         CGFloat sliderFrameSide = fmaxf(self.sliderCircleRadius * 2.f, 44.f);
